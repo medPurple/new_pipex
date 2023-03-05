@@ -6,7 +6,7 @@
 /*   By: wmessmer <wmessmer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:24:21 by wmessmer          #+#    #+#             */
-/*   Updated: 2023/03/05 19:38:43 by wmessmer         ###   ########.fr       */
+/*   Updated: 2023/03/05 21:50:09 by wmessmer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,10 @@ void	close_pipe(t_pipe *pipex);
 /* BONUS */
 void first_pipe(t_pipe_b *pipex, char *cmd, char **env);
 void last_pipe(t_pipe_b *pipex,char *cmd, char **env);
-void multi_pipe();
+void multi_pipe(t_pipe_b *pipex,char *cmd, char **env);
 void	bonus_init(char **av, int ac,t_pipe_b *pipex, char **env);
 void bonus_error(int a);
-//void here_doc(char *limiter, t_pipe_b *pipex);
 int here_or_not(char *av,t_pipe_b *pipex);
 void here_pipe(char *limiter, t_pipe_b *pipex);
-
+void execute_cmd(t_pipe_b *pipex,char *cmd, char **env);
 #endif

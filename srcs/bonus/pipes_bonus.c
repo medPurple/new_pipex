@@ -1,5 +1,5 @@
 #include "../../include/pipex.h"
-static char *kjsdbskdbv(char **paths, char *cmd)
+static char *search(char **paths, char *cmd)
 {
     char	*tmp;
     char	*command;
@@ -16,73 +16,36 @@ static char *kjsdbskdbv(char **paths, char *cmd)
     return (NULL);
 }
 
-static void execute_cmd(t_pipe_b *pipex,char *cmd, char **env)
+void execute_cmd(t_pipe_b *pipex,char *bla, char **env)
 {
-    pipex->argument = ft_split(cmd, ' ');
-    if(!ft_strchr(cmd, '/'))
+    pipex->argument = ft_split(bla, ' ');
+    if((ft_strchr(pipex->argument[0], '/') != NULL))
         pipex->cmd = pipex->argument[0];
     else
-        pipex->cmd = kjsdbskdbv(pipex->path, pipex->argument[0]);
+        pipex->cmd = search(pipex->path, pipex->argument[0]);
     if(execve(pipex->cmd, pipex->argument, env) == -1)
     {
         //free
-        send_error("Command execution\n");
+        send_error(" Error : Command execution\n");
         exit(1);
     }
 }
 
-void first_pipe(t_pipe_b *pipex, char *cmd, char **env)
+void multi_pipe(t_pipe_b *pipex,char *cmd, char **env)
 {
-    if (!(pipex->child = fork()))
+    if (pipe(pipex->pipe_fd_b) < 0)
+        bonus_error(2);
+    if ((pipex->child = fork()) < 0)
         bonus_error(3);
     if (pipex->child == 0)
-    {
-        dup2(pipex->infile,STDIN_FILENO);
-        dup2(pipex->pipe_fd_b[1],STDOUT_FILENO);
-        close(pipex->pipe_fd_b[0]);
-        execute_cmd(pipex, cmd, env);
-    }
-    else
-    {
-        dup2(pipex->pipe_fd_b[0],STDIN_FILENO);
-        close(pipex->pipe_fd_b[1]);
-        waitpid(pipex->child, NULL, 0);
-    }
-}
-void multi_pipe(t_pipe_b *pipex)
-{
-    if (!(pipex->child = fork()))
-        bonus_error(3);
-    if (pipex->child == 0)
-    {
-       dup2(pipex->pipe_fd_b[1],STDOUT_FILENO);
-       close(pipex->pipe_fd_b[0]);
-
-
-        
-    }
-    else
-    {
-        dup2(pipex->pipe_fd_b[0],STDIN_FILENO);
-        close(pipex->pipe_fd_b[1]);
-    }
-}
-
-void last_pipe(t_pipe_b *pipex,char *cmd, char **env)
-{
-    if (!(pipex->child = fork()))
-        bonus_error(3);
-    if (pipex->child == 0)
-    {
-        dup2(pipex->outfile,STDOUT_FILENO);
-        dup2(pipex->pipe_fd_b[0],STDIN_FILENO);
-        close(pipex->pipe_fd_b[1]);
-        execute_cmd(pipex, cmd, env);
-    }
-    else
     {
         dup2(pipex->pipe_fd_b[1],STDOUT_FILENO);
         close(pipex->pipe_fd_b[0]);
-        waitpid(pipex->child, NULL, 0);
+        execute_cmd(pipex,cmd,env);
+    }
+    else
+    {
+        dup2(pipex->pipe_fd_b[0],STDIN_FILENO);
+        close(pipex->pipe_fd_b[1]);
     }
 }
