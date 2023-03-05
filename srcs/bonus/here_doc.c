@@ -6,7 +6,7 @@
 /*   By: wmessmer <wmessmer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 18:01:59 by wmessmer          #+#    #+#             */
-/*   Updated: 2023/02/21 09:51:59 by wmessmer         ###   ########.fr       */
+/*   Updated: 2023/03/05 19:39:46 by wmessmer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,19 @@ int here_or_not(char *av,t_pipe_b *pipex)
 	}
 }
 
-void here_doc(char *limiter, t_pipe_b *pipex)
+void here_pipe(char *limiter, t_pipe_b *pipex)
 {
+    if (pipe(pipex->pipe_fd_b) < 0)
+        bonus_error(2);
     char *line;
-    pipex->fd_tmp = open(".tmp", O_CREAT, O_TRUNC, O_RDWR, 777);
+    //dup2(pipex->pipe_fd_b[0],STDIN_FILENO);
+    //close(pipex->pipe_fd_b[1]);
     while(1)
     {
         write(1, "heredoc>", 8);
         line = get_next_line(1);
         if (strncmp(line, limiter,ft_strlen(limiter)) == 0)
             break;
-        write(pipex->fd_tmp, line, ft_strlen(line));
-        wait(NULL);
+        write(pipex->pipe_fd_b[1], line, ft_strlen(line));
     }
-
 }

@@ -6,7 +6,7 @@
 /*   By: wmessmer <wmessmer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 11:18:23 by wmessmer          #+#    #+#             */
-/*   Updated: 2023/02/17 18:01:35 by wmessmer         ###   ########.fr       */
+/*   Updated: 2023/03/05 18:37:30 by wmessmer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	bonus_init(char **av, int ac,t_pipe_b *pipex, char **env)
 		pipex->outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0000644);
 		if (pipex->outfile < 0)
 			bonus_error(1);
-		here_doc(av[2],pipex);
 	}
 	pipex->cmd_nb = ac - 3 - pipex->here;
     pipex->begin = 2 + pipex->here;
@@ -54,6 +53,6 @@ void bonus_error(int a)
 		send_error("Pipe error\n");
     if (a == 3)
         send_error("Fork error\n");
-    perror(" Error :");
+    perror(" Error ");
 	exit(1);
 }

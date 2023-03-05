@@ -6,7 +6,7 @@
 /*   By: wmessmer <wmessmer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:24:21 by wmessmer          #+#    #+#             */
-/*   Updated: 2023/02/17 17:01:30 by wmessmer         ###   ########.fr       */
+/*   Updated: 2023/03/05 19:38:43 by wmessmer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_pipe_b
     char *cmd;
     int fd_tmp;
 	int pipe_fd_b[2];
+    int fd_test[2];
 	pid_t	child;	
 }	t_pipe_b;
 
@@ -64,7 +65,8 @@ void last_pipe(t_pipe_b *pipex,char *cmd, char **env);
 void multi_pipe();
 void	bonus_init(char **av, int ac,t_pipe_b *pipex, char **env);
 void bonus_error(int a);
-void here_doc(char *limiter, t_pipe_b *pipex);
+//void here_doc(char *limiter, t_pipe_b *pipex);
 int here_or_not(char *av,t_pipe_b *pipex);
+void here_pipe(char *limiter, t_pipe_b *pipex);
 
 #endif

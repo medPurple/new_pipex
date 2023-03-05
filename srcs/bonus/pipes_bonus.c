@@ -49,9 +49,23 @@ void first_pipe(t_pipe_b *pipex, char *cmd, char **env)
         waitpid(pipex->child, NULL, 0);
     }
 }
-void multi_pipe()
+void multi_pipe(t_pipe_b *pipex)
 {
-    ft_printf("PIPE\n");
+    if (!(pipex->child = fork()))
+        bonus_error(3);
+    if (pipex->child == 0)
+    {
+       dup2(pipex->pipe_fd_b[1],STDOUT_FILENO);
+       close(pipex->pipe_fd_b[0]);
+
+
+        
+    }
+    else
+    {
+        dup2(pipex->pipe_fd_b[0],STDIN_FILENO);
+        close(pipex->pipe_fd_b[1]);
+    }
 }
 
 void last_pipe(t_pipe_b *pipex,char *cmd, char **env)
