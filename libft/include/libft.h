@@ -116,5 +116,6 @@ int			ft_len_u(unsigned int u);
 /*ajout perso*/
 void		send_error(char *s);
 int			ft_strcmp(char *s1, char *s2);
+void        ft_free(char **tab);
 
 #endif

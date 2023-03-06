@@ -60,12 +60,14 @@ void	free_parent(t_pipe *pipex);
 void	close_pipe(t_pipe *pipex);
 
 /* BONUS */
-void first_pipe(t_pipe_b *pipex, char *cmd, char **env);
-void last_pipe(t_pipe_b *pipex,char *cmd, char **env);
+//void first_pipe(t_pipe_b *pipex, char *cmd, char **env);
+void last_pipe(t_pipe_b *pipex, char *cmd, char **env, char *file);
 void multi_pipe(t_pipe_b *pipex,char *cmd, char **env);
-void	bonus_init(char **av, int ac,t_pipe_b *pipex, char **env);
+void bonus_init(char **av, int ac,t_pipe_b *pipex, char **env);
 void bonus_error(int a);
 int here_or_not(char *av,t_pipe_b *pipex);
 void here_pipe(char *limiter, t_pipe_b *pipex);
 void execute_cmd(t_pipe_b *pipex,char *cmd, char **env);
+void	close_fd(int *fd);
+void dup2_fd(int fd, int fd2);
 #endif

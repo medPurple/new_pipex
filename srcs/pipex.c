@@ -31,5 +31,5 @@ int	main(int ac, char **av, char **env)
 	waitpid(pipex.child, NULL, 0);
 	waitpid(pipex.parent, NULL, 0);
 	free_parent(&pipex);
-	return (1);
+	return (0);
 }

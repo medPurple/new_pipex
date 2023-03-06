@@ -22,21 +22,7 @@ static char *get_path_env(char **env)
 
 void	bonus_init(char **av, int ac,t_pipe_b *pipex, char **env)
 {
-	if (pipex->here == 0)
-	{
-		pipex->infile = open(av[1],O_RDONLY);
-		if (pipex->infile < 0)
-			bonus_error(0);
-		pipex->outfile = open(av[ac - 1], O_CREAT | O_RDWR |O_TRUNC, 0000644);
-		if (pipex->outfile < 0)
-			bonus_error(1);
-	}
-	else
-	{
-		pipex->outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0000644);
-		if (pipex->outfile < 0)
-			bonus_error(1);
-	}
+    (void)av;
 	pipex->cmd_nb = ac - 3 - pipex->here;
     pipex->begin = 2 + pipex->here;
 	pipex->path_env = get_path_env(env);
@@ -53,6 +39,10 @@ void bonus_error(int a)
 		send_error("Pipe error\n");
     if (a == 3)
         send_error("Fork error\n");
+    if (a == 4)
+        send_error("Close error\n");
+    if (a == 5)
+        send_error("Dup2 error\n");
     perror(" Error ");
 	exit(1);
 }

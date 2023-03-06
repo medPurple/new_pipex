@@ -39,13 +39,26 @@ void multi_pipe(t_pipe_b *pipex,char *cmd, char **env)
         bonus_error(3);
     if (pipex->child == 0)
     {
-        dup2(pipex->pipe_fd_b[1],STDOUT_FILENO);
-        close(pipex->pipe_fd_b[0]);
+        dup2_fd(pipex->pipe_fd_b[1],STDOUT_FILENO);
+        close_fd(pipex->pipe_fd_b);
         execute_cmd(pipex,cmd,env);
     }
     else
     {
-        dup2(pipex->pipe_fd_b[0],STDIN_FILENO);
-        close(pipex->pipe_fd_b[1]);
+        dup2_fd(pipex->pipe_fd_b[0],STDIN_FILENO);
+        close_fd(pipex->pipe_fd_b);
     }
+}
+
+void last_pipe(t_pipe_b *pipex, char *cmd, char **env, char *file)
+{
+    pipex->outfile = open(file, O_CREAT | O_RDWR |O_TRUNC, 0000644);
+    if (pipex->outfile < 0)
+        bonus_error(1);
+    if ((pipex->child = fork()) < 0)
+        bonus_error(3);
+    dup2_fd(pipex->outfile,STDOUT_FILENO);
+    close(pipex->outfile);
+    if (pipex->child == 0)
+        execute_cmd(pipex,cmd,env);
 }

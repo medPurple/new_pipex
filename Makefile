@@ -30,6 +30,7 @@ SRC = $(PATH_SRC)/child.c\
 SRC_BONUS = $(PATH_SRC_BONUS)/here_doc.c \
 	  $(PATH_SRC_BONUS)/utils_bonus.c \
 	  $(PATH_SRC_BONUS)/pipes_bonus.c \
+	  $(PATH_SRC_BONUS)/commands.c \
 	  srcs/pipex_bonus.c
 
 LIB = $(PATH_LIB)/libft.a

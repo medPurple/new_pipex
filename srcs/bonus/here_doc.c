@@ -41,8 +41,7 @@ void here_pipe(char *limiter, t_pipe_b *pipex)
             line = get_next_line(1);
             if (strncmp(line, limiter,ft_strlen(limiter)) == 0)
             {
-                close(pipex->pipe_fd_b[0]);
-                close(pipex->pipe_fd_b[1]);
+                close_fd(pipex->pipe_fd_b);
                 exit(EXIT_SUCCESS);             
             }
             write(pipex->pipe_fd_b[1], line, ft_strlen(line));
@@ -50,10 +49,9 @@ void here_pipe(char *limiter, t_pipe_b *pipex)
     }
     else
     {
-        dup2(pipex->pipe_fd_b[0],STDIN_FILENO);
-        close(pipex->pipe_fd_b[0]);
-        close(pipex->pipe_fd_b[1]);
-        waitpid(pipex->child, NULL, 0);    
+        dup2_fd(pipex->pipe_fd_b[0],STDIN_FILENO);
+        close_fd(pipex->pipe_fd_b);
+        waitpid(pipex->child, NULL, 0);
     }
     
 }
