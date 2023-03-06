@@ -6,13 +6,13 @@
 void	close_fd(int *fd)
 {
 	if (close(fd[0]) < 0)
-		bonus_error(4);
+		pipex_error(4);
 	if (close(fd[1]) < 0)
-		bonus_error(4);
+		pipex_error(4);
 }
 
 void	dup2_fd(int fd, int fd2)
 {
 	if (dup2(fd, fd2) < 0)
-		bonus_error(5);
+		pipex_error(5);
 }

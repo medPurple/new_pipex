@@ -28,11 +28,11 @@ int here_or_not(char *av,t_pipe_b *pipex)
 
 void here_pipe(char *limiter, t_pipe_b *pipex)
 {
-    if (pipe(pipex->pipe_fd_b) < 0)
-        bonus_error(2);
+	char *line;
+	if (pipe(pipex->pipe_fd_b) < 0)
+        pipex_error(2);
     if ((pipex->child = fork()) < 0)
-        bonus_error(3);
-    char *line;
+        pipex_error(3);
     if (pipex->child == 0)
     {
         while(1)
@@ -53,5 +53,4 @@ void here_pipe(char *limiter, t_pipe_b *pipex)
         close_fd(pipex->pipe_fd_b);
         waitpid(pipex->child, NULL, 0);
     }
-    
 }

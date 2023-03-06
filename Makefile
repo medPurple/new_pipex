@@ -19,23 +19,24 @@ CFLAGS = -Wall -Werror -Wextra -g3
 
 PATH_SRC = srcs/mandatory
 PATH_SRC_BONUS = srcs/bonus
+PATH_SRC_GEN = srcs/general
 
 PATH_LIB = libft
 
-SRC = $(PATH_SRC)/child.c\
-	  $(PATH_SRC)/free_pipe.c\
-	  $(PATH_SRC)/utils.c \
-	  srcs/pipex.c
+SRC =	srcs/pipex.c
+
+SRC_GEN =	$(PATH_SRC_GEN)/commands.c \
+			$(PATH_SRC_GEN)/utils.c
 
 SRC_BONUS = $(PATH_SRC_BONUS)/here_doc.c \
-	  $(PATH_SRC_BONUS)/utils_bonus.c \
 	  $(PATH_SRC_BONUS)/pipes_bonus.c \
-	  $(PATH_SRC_BONUS)/commands.c \
 	  srcs/pipex_bonus.c
 
 LIB = $(PATH_LIB)/libft.a
 
 OBJ = $(SRC:.c=.o)
+
+OBJ_GEN = $(SRC_GEN:.c=.o)
 
 OBJ_BONUS = $(SRC_BONUS:.c=.o)
 
@@ -43,12 +44,12 @@ all : $(LIB) $(NAME)
 
 bonus : $(LIB) $(NAME_BONUS)
 
-$(NAME) : $(OBJ)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LIB)
+$(NAME) : $(OBJ) $(OBJ_GEN)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(OBJ_GEN) $(LIB)
 	@echo "\n Compilation OK\n"
 
-$(NAME_BONUS) : $(OBJ_BONUS)
-	$(CC) $(CFLAGS) -o $(NAME_BONUS) $(OBJ_BONUS) $(LIB)
+$(NAME_BONUS) : $(OBJ_BONUS) $(OBJ_GEN)
+	$(CC) $(CFLAGS) -o $(NAME_BONUS) $(OBJ_BONUS) $(OBJ_GEN) $(LIB)
 	@echo "\n Compilation Bonus OK\n"
 
 .c.o :
@@ -61,6 +62,7 @@ clean :
 	make -C $(PATH_LIB) clean
 	rm -f $(OBJ)
 	rm -f $(OBJ_BONUS)
+	rm -f $(OBJ_GEN)
 
 fclean : clean
 	make -C $(PATH_LIB) fclean
