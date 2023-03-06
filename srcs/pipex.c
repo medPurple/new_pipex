@@ -6,7 +6,7 @@
 /*   By: wmessmer <wmessmer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:20:25 by wmessmer          #+#    #+#             */
-/*   Updated: 2023/02/17 10:13:52 by wmessmer         ###   ########.fr       */
+/*   Updated: 2023/03/06 18:59:47 by wmessmer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,10 @@
 static void pipex_init(t_pipe *pipex,char **env)
 {
 	pipex->begin = 2;
-	pipex->path_env = get_path_env(env);
-	if (pipex->path_env)
-		pipex->path = ft_split(pipex->path_env, ':');
+	pipex->path = NULL;
+	get_path_env(pipex, env);		
 }
-static void execute_cmd(t_pipe *pipex,char *bla, char **env)
-{
-	pipex->argument = ft_split(bla, ' ');
-	if((ft_strchr(pipex->argument[0], '/') != NULL))
-		pipex->cmd = pipex->argument[0];
-	else
-		pipex->cmd = search(pipex->path, pipex->argument[0]);
-	if(execve(pipex->cmd, pipex->argument, env) == -1)
-	{
-		send_error(" Error : Command execution\n");
-		exit(1);
-	}
-}
+
 
 static void f_pipe(t_pipe *pipex,char *cmd, char **env)
 {
@@ -80,7 +67,8 @@ int	main(int ac, char **av, char **env)
 		pipex.begin++;
 		l_pipe(&pipex,av[pipex.begin],env,av[ac - 1]);
 		while (wait(NULL) > 0);
-		ft_free(pipex.path);
+		if (pipex.path)
+			ft_free(pipex.path);
 		return (0);
 	}
 	return (send_error("Wrong arg\n"), 0);

@@ -6,7 +6,7 @@
 /*   By: wmessmer <wmessmer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:24:21 by wmessmer          #+#    #+#             */
-/*   Updated: 2023/03/05 21:50:09 by wmessmer         ###   ########.fr       */
+/*   Updated: 2023/03/06 18:51:34 by wmessmer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ typedef struct s_pipe
 	int infile;
 	int outfile;
 	int begin;
-	char *path_env;
+	//char *path_env;
 	char **path;
 	char **argument;
 	char *cmd;
@@ -55,6 +55,8 @@ void here_pipe(char *limiter, t_pipe_b *pipex);
 void    pipex_error(int a);
 void	close_fd(int *fd);
 void    dup2_fd(int fd, int fd2);
-char    *get_path_env(char **env);
-char    *search(char **paths, char *cmd);
+
+/* MANDATORY */
+void 	get_path_env(t_pipe *pipex, char **env);
+void execute_cmd(t_pipe *pipex,char *bla, char **env);
 #endif

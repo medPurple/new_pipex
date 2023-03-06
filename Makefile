@@ -6,7 +6,7 @@
 #    By: wmessmer <wmessmer@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/20 09:59:07 by purple            #+#    #+#              #
-#    Updated: 2023/03/03 10:23:27 by purple           ###   ########.fr        #
+#    Updated: 2023/03/06 17:57:06 by wmessmer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,10 +23,11 @@ PATH_SRC_GEN = srcs/general
 
 PATH_LIB = libft
 
-SRC =	srcs/pipex.c
+SRC =	$(PATH_SRC)/utils.c \
+		srcs/pipex.c 
 
-SRC_GEN =	$(PATH_SRC_GEN)/commands.c \
-			$(PATH_SRC_GEN)/utils.c
+SRC_GEN =	$(PATH_SRC_GEN)/commands.c 
+
 
 SRC_BONUS = $(PATH_SRC_BONUS)/here_doc.c \
 	  $(PATH_SRC_BONUS)/pipes_bonus.c \

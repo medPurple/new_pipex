@@ -6,18 +6,31 @@
 /*   By: wmessmer <wmessmer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 17:53:08 by wmessmer          #+#    #+#             */
-/*   Updated: 2023/03/05 22:12:01 by wmessmer         ###   ########.fr       */
+/*   Updated: 2023/03/06 19:11:33 by wmessmer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
+static void *get_path_env(t_pipe_b *pipex, char **env)
+{
+	if (!*env)
+		return;
+	while (*env)
+	{
+		if (ft_strncmp("PATH", *env, 4) == 0)
+		{
+			pipex->path = ft_split(*env, ':');
+			return;
+		}
+		env++;
+	}
+	return;
+}
 static void	bonus_init(t_pipe_b *pipex, char **env)
 {
 
 	pipex->begin = 2 + pipex->here;
-	pipex->path_env = get_path_env(env);
-	if (pipex->path_env)
-		pipex->path = ft_split(pipex->path_env, ':');
+    get_path_env_b(env);
 }
 int	main(int ac, char **av, char **env)
 {
@@ -30,8 +43,8 @@ int	main(int ac, char **av, char **env)
         pipex.infile = open(av[1],O_RDONLY);
         if (pipex.infile < 0)
             pipex_error(0);
-        dup2_fd(pipex.infile, STDIN_FILENO);
-        close(pipex.infile);
+        //dup2_fd(pipex.infile, STDIN_FILENO);
+        //close(pipex.infile);
     }
     else
         here_pipe(av[2],&pipex);
