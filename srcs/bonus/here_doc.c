@@ -6,7 +6,7 @@
 /*   By: wmessmer <wmessmer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 18:01:59 by wmessmer          #+#    #+#             */
-/*   Updated: 2023/03/06 19:09:43 by wmessmer         ###   ########.fr       */
+/*   Updated: 2023/03/07 13:34:39 by wmessmer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,21 @@ void here_pipe(char *limiter, t_pipe_b *pipex)
             line = get_next_line(1);
             if ((strncmp(line, limiter,ft_strlen(limiter)) == 0) && (line[ft_strlen(limiter)] == '\n'))
             {
+                free(line);
+                if (pipex->path)
+                    ft_free(pipex->path);
                 close_fd(pipex->pipe_fd_b);
                 exit(EXIT_SUCCESS);             
             }
             write(pipex->pipe_fd_b[1], line, ft_strlen(line));
+            free(line);
         }
     }
     else
     {
         dup2_fd(pipex->pipe_fd_b[0],STDIN_FILENO);
-        close_fd(pipex->pipe_fd_b);
+        pipex->infile = pipex->pipe_fd_b[0];
+        close(pipex->pipe_fd_b[1]);
         waitpid(pipex->child, NULL, 0);
     }
 }

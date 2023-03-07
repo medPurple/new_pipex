@@ -3,6 +3,7 @@
 		"libft.h": "c",
 		"pipex.h": "c",
 		"wait.h": "c",
-		"__stddef_max_align_t.h": "c"
+		"__stddef_max_align_t.h": "c",
+		"types.h": "c"
 	}
 }

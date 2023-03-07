@@ -11,7 +11,7 @@ void get_path_env(t_pipe *pipex, char **env)
 	{
 		if (ft_strncmp("PATH", *env, 4) == 0)
 		{
-			pipex->path = ft_split(*env, ':');
+			pipex->path = ft_split(*env + 5, ':');
 			return;
 		}
 		env++;
@@ -57,8 +57,10 @@ void execute_cmd(t_pipe *pipex,char *bla, char **env)
 	{
 		if(execve(pipex->cmd, pipex->argument, env) == -1)
 		{
+			if(pipex->path)
+				ft_free(pipex->path);
 			ft_free(pipex->argument);
-			send_error("Error :\n Command execution\n");
+			pipex_error(6);
 			exit(1);
 		}
 	}

@@ -31,6 +31,8 @@ void pipex_error(int a)
 		send_error("Close error\n");
 	if (a == 5)
 		send_error("Dup2 error\n");
+	if (a == 6)
+		send_error("Execution\n ");
 	perror(" Error ");
 	exit(1);
 }
