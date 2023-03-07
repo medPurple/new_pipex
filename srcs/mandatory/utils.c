@@ -1,28 +1,38 @@
-//
-// Created by wmessmer on 3/6/23.
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: wmessmer <wmessmer@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/07 15:42:48 by wmessmer          #+#    #+#             */
+/*   Updated: 2023/03/07 15:42:51 by wmessmer         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/pipex.h"
 
-void get_path_env(t_pipe *pipex, char **env)
+void	get_path_env(t_pipe *pipex, char **env)
 {
 	if (!*env)
-		return;
+		return ;
 	while (*env)
 	{
 		if (ft_strncmp("PATH", *env, 4) == 0)
 		{
 			pipex->path = ft_split(*env + 5, ':');
-			return;
+			return ;
 		}
 		env++;
 	}
-	return;
+	return ;
 }
-static char *search(t_pipe *pipex)
+
+static char	*search(t_pipe *pipex)
 {
 	char	*tmp;
 	char	*command;
-	int i;
+	int		i;
 
 	i = 0;
 	if (!(pipex->path))
@@ -46,18 +56,18 @@ static char *search(t_pipe *pipex)
 	exit(EXIT_FAILURE);
 }
 
-void execute_cmd(t_pipe *pipex,char *bla, char **env)
+void	execute_cmd(t_pipe *pipex, char *bla, char **env)
 {
 	pipex->argument = ft_split(bla, ' ');
-	if((ft_strchr(pipex->argument[0], '/') != NULL))
+	if ((ft_strchr(pipex->argument[0], '/') != NULL))
 		pipex->cmd = pipex->argument[0];
 	else
 		pipex->cmd = search(pipex);
-	if(pipex->cmd)
+	if (pipex->cmd)
 	{
-		if(execve(pipex->cmd, pipex->argument, env) == -1)
+		if (execve(pipex->cmd, pipex->argument, env) == -1)
 		{
-			if(pipex->path)
+			if (pipex->path)
 				ft_free(pipex->path);
 			ft_free(pipex->argument);
 			pipex_error(6);

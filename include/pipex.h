@@ -12,7 +12,7 @@
 
 #ifndef PIPEX_H
 # define PIPEX_H
-#include "../libft/include/libft.h"
+# include "../libft/include/libft.h"
 
 typedef struct s_pipe
 {
@@ -45,6 +45,8 @@ void	last_pipe(t_pipe_b *pipex, char *cmd, char **env, char *file);
 void	multi_pipe(t_pipe_b *pipex, char *cmd, char **env);
 int		here_or_not(char *av, t_pipe_b *pipex);
 void	here_pipe(char *limiter, t_pipe_b *pipex);
+void	ft_gestion_bonus_1(t_pipe_b *pipex);
+void	ft_gestion_bonus_2(t_pipe_b *pipex);
 
 /*GENERAL UTILS */
 void	pipex_error(int a);

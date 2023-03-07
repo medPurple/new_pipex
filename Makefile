@@ -31,6 +31,7 @@ SRC_GEN =	$(PATH_SRC_GEN)/commands.c
 
 SRC_BONUS = $(PATH_SRC_BONUS)/here_doc.c \
 	  $(PATH_SRC_BONUS)/pipes_bonus.c \
+	  $(PATH_SRC_BONUS)/bonus_norme.c \
 	  srcs/pipex_bonus.c
 
 LIB = $(PATH_LIB)/libft.a

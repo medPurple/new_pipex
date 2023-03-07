@@ -6,11 +6,20 @@
 /*   By: wmessmer <wmessmer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 13:20:25 by wmessmer          #+#    #+#             */
-/*   Updated: 2023/03/07 12:55:24 by wmessmer         ###   ########.fr       */
+/*   Updated: 2023/03/07 15:32:19 by wmessmer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
+
+static void	ft_gestion(t_pipe *pipex)
+{
+	close(pipex->pipe_fd[0]);
+	dup2_fd(pipex->infile, STDIN_FILENO);
+	dup2_fd(pipex->pipe_fd[1], STDOUT_FILENO);
+	close(pipex->infile);
+	close(pipex->pipe_fd[1]);
+}
 
 static void	pipex_init(t_pipe *pipex, char **env)
 {
@@ -22,53 +31,51 @@ static void	pipex_init(t_pipe *pipex, char **env)
 static void	f_pipe(t_pipe *pipex, char *cmd, char **env)
 {
 	if (pipe(pipex->pipe_fd) < 0)
-        pipex_error(2);
-    if ((pipex->child = fork()) < 0)
-	    pipex_error(3);
-    if (pipex->child == 0)
-    {
+		pipex_error(2);
+	pipex->child = fork();
+	if (pipex->child < 0)
+		pipex_error(3);
+	if (pipex->child == 0)
+	{
 		if (pipex->infile < 0)
 		{
-			if(pipex->path)
+			if (pipex->path)
 				ft_free(pipex->path);
 			close_fd(pipex->pipe_fd);
 			exit(EXIT_FAILURE);
 		}
-		close(pipex->pipe_fd[0]);
-	    dup2_fd(pipex->infile, STDIN_FILENO);
-		dup2_fd(pipex->pipe_fd[1],STDOUT_FILENO);
-	    close(pipex->infile);
-		close(pipex->pipe_fd[1]);
-        execute_cmd(pipex,cmd,env);
-    }
-    else
-    {
-		if(pipex->infile >= 0)
+		ft_gestion(pipex);
+		execute_cmd(pipex, cmd, env);
+	}
+	else
+	{
+		if (pipex->infile >= 0)
 			close(pipex->infile);
 		pipex->infile = pipex->pipe_fd[0];
 		close(pipex->pipe_fd[1]);
-    }
+	}
 }
 
 static void	l_pipe(t_pipe *pipex, char *cmd, char **env, char *file)
 {
-    pipex->outfile = open(file, O_CREAT | O_RDWR |O_TRUNC, 0000644);
-    if (pipex->outfile < 0)
+	pipex->outfile = open(file, O_CREAT | O_RDWR | O_TRUNC, 0000644);
+	if (pipex->outfile < 0)
 	{
 		if (pipex->path)
 			ft_free(pipex->path);
 		close(pipex->infile);
-	    pipex_error(1);
+		pipex_error(1);
 	}
-	if ((pipex->child = fork()) < 0)
-	    pipex_error(3);
-    if (pipex->child == 0)
+	pipex->child = fork();
+	if (pipex->child < 0)
+		pipex_error(3);
+	if (pipex->child == 0)
 	{
 		dup2_fd(pipex->infile, STDIN_FILENO);
-		dup2_fd(pipex->outfile,STDOUT_FILENO);
-    	close(pipex->outfile);
+		dup2_fd(pipex->outfile, STDOUT_FILENO);
+		close(pipex->outfile);
 		close(pipex->infile);
-        execute_cmd(pipex,cmd,env);
+		execute_cmd(pipex, cmd, env);
 	}
 	else
 	{

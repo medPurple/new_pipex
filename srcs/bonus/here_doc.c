@@ -12,9 +12,26 @@
 
 #include "../../include/pipex.h"
 
-int here_or_not(char *av,t_pipe_b *pipex)
+static void	ft_gestion_before(t_pipe_b *pipex)
 {
-	if(av && (ft_strcmp(av,"here_doc")) == 0)
+	if (pipe(pipex->pipe_fd_b) < 0)
+		pipex_error(2);
+	pipex->child = fork();
+	if (pipex->child < 0)
+		pipex_error(3);
+}
+
+static void	ft_gestion_parent(t_pipe_b *pipex)
+{
+	dup2_fd(pipex->pipe_fd_b[0], STDIN_FILENO);
+	pipex->infile = pipex->pipe_fd_b[0];
+	close(pipex->pipe_fd_b[1]);
+	waitpid(pipex->child, NULL, 0);
+}
+
+int	here_or_not(char *av, t_pipe_b *pipex)
+{
+	if (av && (ft_strcmp(av, "here_doc")) == 0)
 	{
 		pipex->here = 1;
 		return (6);
@@ -26,36 +43,30 @@ int here_or_not(char *av,t_pipe_b *pipex)
 	}
 }
 
-void here_pipe(char *limiter, t_pipe_b *pipex)
+void	here_pipe(char *limiter, t_pipe_b *pipex)
 {
-	char *line;
-	if (pipe(pipex->pipe_fd_b) < 0)
-        pipex_error(2);
-    if ((pipex->child = fork()) < 0)
-        pipex_error(3);
-    if (pipex->child == 0)
-    {
-        while(1)
-        {
-            write(1, "heredoc>", 8);
-            line = get_next_line(1);
-            if ((strncmp(line, limiter,ft_strlen(limiter)) == 0) && (line[ft_strlen(limiter)] == '\n'))
-            {
-                free(line);
-                if (pipex->path)
-                    ft_free(pipex->path);
-                close_fd(pipex->pipe_fd_b);
-                exit(EXIT_SUCCESS);             
-            }
-            write(pipex->pipe_fd_b[1], line, ft_strlen(line));
-            free(line);
-        }
-    }
-    else
-    {
-        dup2_fd(pipex->pipe_fd_b[0],STDIN_FILENO);
-        pipex->infile = pipex->pipe_fd_b[0];
-        close(pipex->pipe_fd_b[1]);
-        waitpid(pipex->child, NULL, 0);
-    }
+	char	*line;
+
+	ft_gestion_before(pipex);
+	if (pipex->child == 0)
+	{
+		while (1)
+		{
+			write(1, "heredoc>", 8);
+			line = get_next_line(1);
+			if ((strncmp(line, limiter, ft_strlen(limiter)) == 0) \
+				&& (line[ft_strlen(limiter)] == '\n'))
+			{
+				free(line);
+				if (pipex->path)
+					ft_free(pipex->path);
+				close_fd(pipex->pipe_fd_b);
+				exit(EXIT_SUCCESS);
+			}
+			write(pipex->pipe_fd_b[1], line, ft_strlen(line));
+			free(line);
+		}
+	}
+	else
+		ft_gestion_parent(pipex);
 }

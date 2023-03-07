@@ -6,7 +6,7 @@
 /*   By: wmessmer <wmessmer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:22:58 by wmessmer          #+#    #+#             */
-/*   Updated: 2023/03/07 13:57:32 by wmessmer         ###   ########.fr       */
+/*   Updated: 2023/03/07 14:17:52 by wmessmer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include <fcntl.h>
 # include <stdarg.h>
 # include <stddef.h>
-#include <sys/wait.h>
+# include <sys/wait.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1
@@ -92,9 +92,9 @@ t_list		*ft_lstlast(t_list *lst);
 /*gnl*/
 
 char		*get_next_line(int fd);
-char	*ft_getlast_line(char *line, char *buf);
-char	*ft_check_line(char *line);
-char	*ft_read_line(int fd, char *line, char *buf);
+char		*ft_getlast_line(char *line, char *buf);
+char		*ft_check_line(char *line);
+char		*ft_read_line(int fd, char *line, char *buf);
 
 /*printf*/
 
